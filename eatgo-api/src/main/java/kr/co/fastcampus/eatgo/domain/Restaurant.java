@@ -1,19 +1,34 @@
 package kr.co.fastcampus.eatgo.domain;
 
+import lombok.*;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
 
-@RestController
+@Entity
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Restaurant {
-    private Long id;
-    private String name;
-    private String address;
-    private List<MenuItem> menuItems = new ArrayList<>();
 
-    public Restaurant() {}
+    @Id
+    @GeneratedValue
+    @Setter
+    private Long id;
+
+    private String name;
+
+    private String address;
+
+    @Transient
+    private List<MenuItem> menuItems;
 
     public Restaurant(String name, String address) {
         this.name = name;
@@ -26,37 +41,16 @@ public class Restaurant {
         this.address = address;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
     public String getInformation() {
         return this.name + " in " + this.address;
     }
 
-    public String getAddress() {
-        return this.address;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public List<MenuItem> getMenuItems() {
-        return menuItems;
-    }
-
-    public void addMenuItem(MenuItem menuItem) {
-        menuItems.add(menuItem);
-    }
-
     public void setMenuItem(List<MenuItem> menuItems) {
-        for(MenuItem menuItem : menuItems) {
-            addMenuItem(menuItem);
-        }
+        this.menuItems = new ArrayList<>(menuItems);
+    }
+
+    public void updateInformation(String name, String address) {
+        this.name = name;
+        this.address = address;
     }
 }
